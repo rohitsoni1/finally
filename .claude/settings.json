@@ -1,19 +1,20 @@
 {
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codex exec \"Review the changes since last commit and write result in file under feedback/LclChanges.md\""
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "playwright@claude-plugins-official": true
-  },
-  "hooks":{
-        "Stop":[
-            {
-            "hooks": [
-                {
-                    "type":"command",
-                    "command":"codex exec \"Review the changes since last commit and write result in file under feedback/Changes.md\""
-                }
-        ]
-        }
-    ]
-    }
+    "playwright@claude-plugins-official": true,
+    "rs-reviewer@rs-tools": true
+  }
 }

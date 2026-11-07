@@ -1,25 +1,24 @@
 # Change review
 
-Reviewed the working-tree changes against `HEAD` on 2026-11-07.
+Reviewed the working tree against `HEAD` (`35e749a`) on 2026-11-07, including untracked files.
 
 ## Findings
 
-### P1 — The change removes the entire market-data backend and its tests
+### P2 — Stop hooks run duplicate reviews
 
-The diff deletes `backend/app/market/` (the source interface, simulator, Massive client, cache, models, factory, and SSE stream), `backend/market_data_demo.py`, the backend dependency/lock files, and all backend market tests. No replacement implementation appears in the working tree. The README and `planning/PLAN.md` still describe a working FastAPI backend and streaming market data, so this leaves the documented application without its backend subsystem. If this is an intentional reset, the repository documentation and scope need to say so; otherwise restore or replace these files.
+`.claude/settings.json` runs a review into `feedback/LclChanges.md`. The locally enabled `rs-reviewer@rs-tools` plugin (`.claude/settings.local.json`) also runs its Stop hook from `independent-reviewer/hooks/hooks.json`, writing to `feedback/IndependentChanges.md`. With both configurations active, one stop starts two reviews of the same changes, adding work and potentially leaving multiple conflicting reports. Keep one hook active or make their scopes distinct.
 
-### P1 — README quick start points to files absent from the repository
+### P2 — README deletion removes the project entry point
 
-The revised quick start requires `.env.example` and `scripts/start_mac.sh`, and mentions `scripts/start_windows.ps1` and `scripts/stop_mac.sh`. None of these paths exists in the current tree. As written, setup fails at `cp .env.example .env` before the app can start. Restore the referenced files or make the instructions use files that exist (the prior Docker build/run commands are also not currently runnable because the backend and Dockerfile are absent).
+`README.md` is deleted without replacement. This removes the project overview, startup instructions, environment-variable guidance, and repository layout. Restore it or provide an equivalent entry point.
 
-### P2 — Stop hook launches a recursive review on every stop
+### P3 — Marketplace owner email is placeholder text
 
-`.claude/settings.json` adds a `Stop` command that runs `codex exec` with a request to review changes and write `feedback/Changes.md`. Since this hook runs when the assistant stops, the launched Codex session can itself trigger the same hook, causing repeated nested reviews or runaway execution. Add a recursion guard (for example, a hook-specific environment flag) or use a mechanism that does not invoke another stop-hook-enabled session.
+`.claude-plugin/marketplace.json` sets the owner email to `email`. Replace it with maintainer contact information, or omit the field if it is optional, before distributing the marketplace.
 
-### P2 — Stop hook configuration is difficult to maintain and has no failure handling
+## Notes
 
-The new JSON is valid but unusually indented, and the hook has no timeout/failure behavior or guard for a missing `codex` executable. A missing executable or failed review can make the stop hook fail repeatedly. Format the JSON and define a bounded failure strategy so the hook cannot trap the session.
-
-## Summary
-
-The README now describes a shorter setup, but the working tree removes the backend that README and the plan still describe, while the new setup commands reference absent files. The stop hook also risks recursively invoking itself. No tests were run; this was a source review.
+- `feedback/Review.md` is deleted, removing the existing specification review and its open questions.
+- The marketplace declares plugin name `rs-reviewer` and source `./independent-reviewer`; the plugin manifest also declares `rs-reviewer`, so the plugin identity is consistent.
+- `.DS_Store` is modified and `.claude/.DS_Store` is untracked; these are local Finder metadata and generally should not be committed.
+- `git diff --check HEAD` reported no whitespace errors. No tests were run; this was a source/configuration review.

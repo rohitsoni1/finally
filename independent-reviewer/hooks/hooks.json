@@ -1,0 +1,14 @@
+{
+    "hooks": {
+        "Stop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "codex exec \"Review the changes since last commit and write result in file under feedback/IndependentChanges.md\""
+                    }
+                ]
+            }
+        ]
+    }
+}
