@@ -1,62 +1,37 @@
 # FinAlly — AI Trading Workstation
 
-A visually stunning AI-powered trading workstation that streams live market data, simulates portfolio trading, and integrates an LLM chat assistant that can analyze positions and execute trades via natural language.
-
-Built entirely by coding agents as a capstone project for an agentic AI coding course.
-
-## Features
-
-- **Live price streaming** via SSE with green/red flash animations
-- **Simulated portfolio** — $10k virtual cash, market orders, instant fills
-- **Portfolio visualizations** — heatmap (treemap), P&L chart, positions table
-- **AI chat assistant** — analyzes holdings, suggests and auto-executes trades
-- **Watchlist management** — track tickers manually or via AI
-- **Dark terminal aesthetic** — Bloomberg-inspired, data-dense layout
-
-## Architecture
-
-Single Docker container serving everything on port 8000:
-
-- **Frontend**: Next.js (static export) with TypeScript and Tailwind CSS
-- **Backend**: FastAPI (Python/uv) with SSE streaming
-- **Database**: SQLite with lazy initialization
-- **AI**: LiteLLM → OpenRouter (Cerebras inference) with structured outputs
-- **Market data**: Built-in GBM simulator (default) or Massive API (optional)
+An AI-powered trading terminal: live market prices, a simulated $10,000 portfolio, and an LLM assistant that analyzes positions and executes trades through chat. Built entirely by coding agents as the capstone of an agentic AI coding course.
 
 ## Quick Start
 
 ```bash
-# Clone and configure
-cp .env.example .env
-# Add your OPENROUTER_API_KEY to .env
-
-# Run with Docker
-docker build -t finally .
-docker run -v finally-data:/app/db -p 8000:8000 --env-file .env finally
-
-# Open http://localhost:8000
+cp .env.example .env        # add your OPENROUTER_API_KEY
+./scripts/start_mac.sh      # Windows: ./scripts/start_windows.ps1
 ```
 
-## Environment Variables
+Open http://localhost:8000. Stop with `./scripts/stop_mac.sh`. Data persists in the `finally-data` Docker volume.
 
-| Variable | Required | Description |
-|---|---|---|
-| `OPENROUTER_API_KEY` | Yes | OpenRouter API key for AI chat |
-| `MASSIVE_API_KEY` | No | Massive (Polygon.io) key for real market data; omit to use simulator |
-| `LLM_MOCK` | No | Set `true` for deterministic mock LLM responses (testing) |
+## Environment
 
-## Project Structure
+| Variable | Purpose |
+|---|---|
+| `OPENROUTER_API_KEY` | Required for AI chat |
+| `MASSIVE_API_KEY` | Optional; real market data (simulator used if unset) |
+| `LLM_MOCK` | Optional; `true` for deterministic LLM responses in tests |
+
+## Stack
+
+Next.js + TypeScript (static export) · FastAPI + `uv` · SQLite · SSE · LiteLLM → OpenRouter (Cerebras) · single Docker container on port 8000
+
+## Layout
 
 ```
-finally/
-├── frontend/    # Next.js static export
-├── backend/     # FastAPI uv project
-├── planning/    # Project documentation and agent contracts
-├── test/        # Playwright E2E tests
-├── db/          # SQLite volume mount (runtime)
-└── scripts/     # Start/stop helpers
+frontend/   Next.js app
+backend/    FastAPI: API, SSE, market data, LLM, DB
+planning/   Specs (start with PLAN.md)
+scripts/    Docker start/stop scripts
+test/       Playwright E2E tests
+db/         SQLite volume mount
 ```
 
-## License
-
-See [LICENSE](LICENSE).
+See `planning/PLAN.md` for the full specification.
