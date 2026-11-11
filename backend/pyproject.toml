@@ -1,0 +1,31 @@
+[project]
+name = "finally-backend"
+version = "0.1.0"
+description = "FinAlly backend: FastAPI app, market data, portfolio, LLM chat"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.162.4",
+    "httpx>=0.28.1",
+    "litellm>=1.109.0",
+    "massive>=2.9.2",
+    "numpy>=2.5.4",
+    "pydantic>=2.14.3",
+    "python-dotenv>=1.2.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-asyncio>=1.4.1.post1",
+    "pytest-cov>=7.1.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true

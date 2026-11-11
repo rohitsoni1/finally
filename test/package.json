@@ -1,0 +1,17 @@
+{
+  "name": "finally-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E tests for FinAlly",
+  "scripts": {
+    "test": "playwright test",
+    "test:local": "./run-local.sh",
+    "test:docker": "docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from playwright",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "@types/node": "20.19.9",
+    "typescript": "5.9.3"
+  }
+}

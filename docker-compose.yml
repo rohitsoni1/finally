@@ -1,0 +1,19 @@
+# Optional convenience wrapper. Equivalent to scripts/start_mac.sh:
+#   docker compose up -d --build
+services:
+  finally:
+    build: .
+    image: finally:latest
+    container_name: finally
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - finally-data:/app/db
+    restart: unless-stopped
+
+volumes:
+  finally-data:
+    name: finally-data
